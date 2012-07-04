@@ -1,0 +1,32 @@
+---
+abstract: 'Internationalization Plugin for Mojolicious 3.x and higher'
+author:
+  - 'Anatoly Sharifulin <sharifulin@gmail.com>'
+build_requires:
+  Test::More: 0
+configure_requires:
+  Module::Build: 0.36
+generated_by: 'Module::Build version 0.3603'
+keywords:
+  - mojo
+  - mojolicious
+  - plugin
+  - i18n
+  - internationalization
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Mojolicious-Plugin-I18N
+provides:
+  Mojolicious::Plugin::I18N:
+    file: lib/Mojolicious/Plugin/I18N.pm
+    version: 0.8
+requires:
+  I18N::LangTags: 0
+  Mojolicious: 3
+  perl: 5.010001
+resources:
+  license: http://dev.perl.org/licenses/
+  repository: http://github.com/sharifulin/Mojolicious-Plugin-I18N
+version: 0.8

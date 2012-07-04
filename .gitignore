@@ -1,2 +1,4 @@
 *.tar.gz
 MANIFEST.SKIP
+MANIFEST.SKIP.*
+.DS_Store
