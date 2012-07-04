@@ -1,0 +1,12 @@
+Revision history for Mojolicious-Plugin-I18N
+
+0.8  2012-07-04/18:48
+	* rename namespace
+
+0.2  2012-06-16/13:37
+	* fixed url_for
+
+0.1  2012-02-29/15:40
+	* first release for public
+	* improve url_for helper
+	* add script app_i18n2_mail.pl
