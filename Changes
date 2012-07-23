@@ -1,5 +1,8 @@
 Revision history for Mojolicious-Plugin-I18N
 
+0.81 2012-07-23/16:32
+	* fixed test suite
+
 0.8  2012-07-04/18:48
 	* rename namespace
 

@@ -5,7 +5,7 @@ use Mojo::URL;
 use I18N::LangTags;
 use I18N::LangTags::Detect;
 
-our $VERSION = 0.8;
+our $VERSION = 0.81;
 
 # "Can we have Bender burgers again?
 #  No, the cat shelter’s onto me."

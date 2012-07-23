@@ -6,7 +6,7 @@ WriteMakefile
           'NAME' => 'Mojolicious::Plugin::I18N',
           'VERSION_FROM' => 'lib/Mojolicious/Plugin/I18N.pm',
           'PREREQ_PM' => {
-                           'I18N::LangTags' => 0,
+                           'I18N::LangTags' => '0.35',
                            'Mojolicious' => '3',
                            'Test::More' => 0
                          },
