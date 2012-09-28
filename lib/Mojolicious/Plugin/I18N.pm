@@ -5,7 +5,7 @@ use Mojo::URL;
 use I18N::LangTags;
 use I18N::LangTags::Detect;
 
-our $VERSION = 0.81;
+our $VERSION = 0.82;
 
 # "Can we have Bender burgers again?
 #  No, the cat shelter’s onto me."
@@ -149,7 +149,14 @@ sub languages {
 	$self->_load_module($namespace => $_) for @languages;
 	
 	if (my $handle = $namespace->get_handle(@languages)) {
-		$handle->fail_with(sub { $_[1] });
+		$handle->fail_with(sub {
+			my $self = shift;
+			my $text = shift;
+			foreach (@_){
+				$text =~ s/\[_\d+\]/$_/;
+			}
+			return $text;
+		});
 		$self->{handle}   = $handle;
 		$self->{language} = $handle->language_tag;
 	}
