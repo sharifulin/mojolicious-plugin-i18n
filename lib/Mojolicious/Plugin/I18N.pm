@@ -152,8 +152,10 @@ sub languages {
 		$handle->fail_with(sub {
 			my $self = shift;
 			my $text = shift;
+			my $i = 0;
 			foreach (@_){
-				$text =~ s/\[_\d+\]/$_/;
+				$i++;
+				$text =~ s/\[_$i\]/$_/g;
 			}
 			return $text;
 		});
