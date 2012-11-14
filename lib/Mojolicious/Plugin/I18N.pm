@@ -110,9 +110,11 @@ sub register {
 		my $lang = $self->stash('lang');
 		my $i; for (@_) {
 			$i++;
-			last if $_ eq 'lang';
+			if ($_ eq 'lang') {
+				$lang = $_[$i];
+				last;
+			}
 		}
-		$lang = $_[$i] if $i;
 		
 		if ($lang) {
 			my $str = $url->path;
