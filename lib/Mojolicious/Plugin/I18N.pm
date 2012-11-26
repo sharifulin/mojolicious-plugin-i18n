@@ -196,7 +196,7 @@ sub _load_module {
 			eval qq(require "$file.pm");
 		
 			my $default = $self->{default};
-			if ($@ || eval "\%${module}::Lexicon") {
+			if ($@ || not eval "\%${module}::Lexicon") {
 				if ($_ eq $default) {
 					DEBUG && warn("Create the I18N class $module");
 					
