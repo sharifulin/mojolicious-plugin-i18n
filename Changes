@@ -1,5 +1,8 @@
 Revision history for Mojolicious-Plugin-I18N
 
+0.82 2012-12-09/19:09
+	* pull reqs on github.com, thanks everyone :)
+
 0.81 2012-07-23/16:32
 	* fixed test suite
 
