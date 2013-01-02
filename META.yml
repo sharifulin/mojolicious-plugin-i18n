@@ -21,7 +21,7 @@ name: Mojolicious-Plugin-I18N
 provides:
   Mojolicious::Plugin::I18N:
     file: lib/Mojolicious/Plugin/I18N.pm
-    version: 0.82
+    version: 0.9
 requires:
   I18N::LangTags: 0.35
   Mojolicious: 3
@@ -29,4 +29,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://github.com/sharifulin/Mojolicious-Plugin-I18N
-version: 0.82
+version: 0.9
