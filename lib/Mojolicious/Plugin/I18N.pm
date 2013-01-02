@@ -5,7 +5,7 @@ use Mojo::URL;
 use I18N::LangTags;
 use I18N::LangTags::Detect;
 
-our $VERSION = 0.82;
+our $VERSION = 0.9;
 
 # "Can we have Bender burgers again?
 #  No, the cat shelter’s onto me."
@@ -110,10 +110,12 @@ sub register {
 		my $lang = $self->stash('lang');
 		my $i; for (@_) {
 			$i++;
-			last if $_ eq 'lang';
-		}
-		$lang = $_[$i] if $i;
-		
+			if ($_ eq 'lang'){
+				$lang = $_[$i];
+				last;                                                                                                                                                                                 
+			}   
+		}   
+
 		if ($lang) {
 			my $str = $url->path;
 			my $new = "/$lang" . ($str eq '/' ? '' : $str);
@@ -360,7 +362,7 @@ L<http://search.cpan.org/dist/Mojolicious-Plugin-I18N>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (C) 2011-2012 by Anatoly Sharifulin.
+Copyright (C) 2011-2013 by Anatoly Sharifulin.
 Copyright (C) 2008-2012, Sebastian Riedel.
 
 This program is free software, you can redistribute it and/or modify it under
