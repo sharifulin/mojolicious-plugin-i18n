@@ -19,7 +19,7 @@ Mojolicious::Plugin::I18N - Internationalization Plugin for Mojolicious 3.x and 
   package MyApp::I18N::de;
   use Mojo::Base 'MyApp::I18N';
 
-  our %Lexicon = (hello => 'hallo');
+  our %Lexicon = (hello => 'hallo', hellovar => 'hallo [_1]');
 
   1;
 
@@ -71,7 +71,10 @@ L<Mojolicious::Plugin::I18N> implements helpers same as L<Mojolicious::Plugin::I
 
   %=l 'hello'
   $self->l('hello');
-
+  
+  %=l 'hellovar', $var
+  $self->l('hellovar', $var);
+  
 Translate sentence.
 
 =head2 C<languages>
