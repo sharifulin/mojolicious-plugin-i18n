@@ -15,6 +15,8 @@ sub register {
 	# Initialize
 	my $namespace = $conf->{namespace} || ( (ref $app) . '::I18N' );
 	my $default   = $conf->{default  } || 'en';
+	$default =~ tr/-A-Z/_a-z/;
+	$default =~ tr/_a-z0-9//cd;
 	my $langs     = $conf->{support_url_langs};
 	my $hosts     = $conf->{support_hosts    };
 	
