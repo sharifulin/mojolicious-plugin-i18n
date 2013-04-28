@@ -5,7 +5,7 @@ use Mojo::URL;
 use I18N::LangTags;
 use I18N::LangTags::Detect;
 
-our $VERSION = 0.9;
+our $VERSION = 0.91;
 
 # "Can we have Bender burgers again?
 #  No, the cat shelter’s onto me."
@@ -17,6 +17,7 @@ sub register {
 	my $default   = $conf->{default  } || 'en';
 	$default =~ tr/-A-Z/_a-z/;
 	$default =~ tr/_a-z0-9//cd;
+	
 	my $langs     = $conf->{support_url_langs};
 	my $hosts     = $conf->{support_hosts    };
 	
@@ -117,7 +118,7 @@ sub register {
 				last;                                                                                                                                                                                 
 			}   
 		}   
-
+		
 		if ($lang) {
 			my $str = $url->path;
 			my $new = "/$lang" . ($str eq '/' ? '' : $str);
