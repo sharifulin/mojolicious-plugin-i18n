@@ -13,20 +13,20 @@ use Mojo::Base 'Mojolicious::Plugin';
 has support_i18n_langs => sub { [qw(ru en)] };
 
 sub register {
-  my ($self, $mojo) = @_;
-  
-  $mojo->helper(
-    login => sub {
-      my $c = shift;
-      my $pwd = shift || '';
-	  
-	  $self->_init_i18n($c);
-	  
-      return 1 if $pwd eq 'p4ssw0rd';
-      $c->stash(error => $c->l('The password was wrong'));
-      return;
-    }
-  );
+	my ($self, $mojo) = @_;
+	
+	$mojo->helper(
+		login => sub {
+			my $c = shift;
+			my $pwd = shift || '';
+			
+			$self->_init_i18n($c);
+			
+			return 1 if $pwd eq 'p4ssw0rd';
+			$c->stash(error => $c->l('The password was wrong'));
+			return;
+		}
+	);
 };
 
 sub _init_i18n {
@@ -40,7 +40,7 @@ sub _init_i18n {
 		my $m = "$i18n->{namespace}::${_}::Lexicon";
 		my $p = "Mojolicious::Plugin::Iam18nAware::I18N::${_}::Lexicon"; # __PACKAGE__
 		
-		eval "\$${m}{\$_} = \$${p}{\$_} for keys \%$p"; # XXX: durty hard code :-)
+		eval "\$${m}{\$_} = \$${p}{\$_} for keys \%$p"; # XXX: dirty hard code :-)
 		warn $@ if $@;
 	}
 	
