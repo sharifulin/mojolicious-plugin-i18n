@@ -36,12 +36,12 @@ sub _init_i18n {
 	my $c    = shift || return;
 	my $i18n = $c->stash('i18n') || return;
 	
+	no strict 'refs';
 	for (@{ $self->support_i18n_langs || [] }) {
 		my $m = "$i18n->{namespace}::${_}::Lexicon";
 		my $p = "Mojolicious::Plugin::Iam18nAware::I18N::${_}::Lexicon"; # __PACKAGE__
 		
-		eval "\$${m}{\$_} = \$${p}{\$_} for keys \%$p"; # XXX: dirty hard code :-)
-		warn $@ if $@;
+		${$m}{$_} = ${$p}{$_} for keys %{$p};
 	}
 	
 	$self->{_init_18n}++;
