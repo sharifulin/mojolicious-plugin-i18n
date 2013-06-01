@@ -10,7 +10,7 @@ BEGIN {
   $ENV{MOJO_IOWATCHER} = 'Mojo::IOWatcher';
 }
 
-use Test::More tests => 14;
+use Test::More;
 
 package App::I18N;
 use base 'Locale::Maketext';
@@ -51,8 +51,9 @@ $t->get_ok('/en')->status_is(200)
 $t->get_ok('/de')->status_is(200)
   ->content_is("ПриветПривет дваru\n/de\n/de?test=1\n");
 
-$t->get_ok('/es')->status_is(404)
-;
+$t->get_ok('/es')->status_is(404);
+
+done_testing;
 
 __DATA__
 @@ index.html.ep

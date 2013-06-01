@@ -8,7 +8,7 @@ BEGIN {
   $ENV{MOJO_IOWATCHER} = 'Mojo::IOWatcher';
 }
 
-use Test::More tests => 24;
+use Test::More;
 
 package MyTestApp::I18N::en;
 use Mojo::Base -strict;
@@ -80,6 +80,8 @@ $t->get_ok('/unknown')->status_is(200)->content_is("unknownde\nunknownen\n");
 # Unknwon (manual)
 $t->get_ok('/unknown' => {'Accept-Language' => 'de, en-US'})->status_is(200)
   ->content_is("unknownde\nunknownen\n");
+
+done_testing;
 
 __DATA__
 @@ index.html.ep

@@ -10,7 +10,7 @@ BEGIN {
   $ENV{MOJO_IOWATCHER} = 'Mojo::IOWatcher';
 }
 
-use Test::More tests => 17;
+use Test::More;
 
 use Mojolicious::Lite;
 
@@ -41,6 +41,8 @@ $t->get_ok('/en-us')->status_is(200)
   ->content_is("helloHello two USen-us\n");
 
 $t->get_ok('/es')->status_is(404);
+
+done_testing;
 
 __DATA__
 @@ index.html.ep

@@ -8,7 +8,7 @@ BEGIN {
   $ENV{MOJO_IOWATCHER} = 'Mojo::IOWatcher';
 }
 
-use Test::More tests => 3;
+use Test::More;
 use Test::Mojo;
 use Mojolicious::Lite;
 
@@ -23,6 +23,8 @@ my $t = Test::Mojo->new;
 # Falling back to default with a lexicon defined
 $t->get_ok('/' => { 'Accept-Language' => 'de' })->status_is(200)
   ->content_is("holaes\n");
+
+done_testing;
 
 __DATA__
 @@ index.html.ep

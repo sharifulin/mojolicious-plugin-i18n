@@ -5,7 +5,7 @@ use Mojo::URL;
 use I18N::LangTags;
 use I18N::LangTags::Detect;
 
-our $VERSION = 0.91;
+our $VERSION = '1.0';
 
 # "Can we have Bender burgers again?
 #  No, the cat shelter’s onto me."
@@ -243,6 +243,7 @@ Mojolicious::Plugin::I18N - Internationalization Plugin for Mojolicious 3.x and 
 =head1 DESCRIPTION
 
 L<Mojolicious::Plugin::I18N> is internationalization plugin for Mojolicious 3.x and higher.
+It works with Mojolicious 4.0+.
 
 Old namespace is L<Mojolicious::Plugin::I18N2>.
 
