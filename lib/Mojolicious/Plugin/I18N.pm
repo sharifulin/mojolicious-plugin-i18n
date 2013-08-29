@@ -104,7 +104,7 @@ sub register {
 	});
 	
 	# Reimplement "url_for" helper
-	$app->helper(url_for => sub {
+	$app->renderer->add_helper(url_for => sub {
 		my $self = shift;
 		my $url  = $self->url_for(@_);
 		
