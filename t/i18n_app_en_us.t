@@ -32,7 +32,7 @@ $t->get_ok('/ru')->status_is(200)
   ->content_is("ПриветПривет дваru\n");
 
 $t->get_ok('/en')->status_is(200)
-  ->content_is("helloHello twoen\n");
+  ->content_is("failed_helloHello twoen\n");
 
 $t->get_ok('/de')->status_is(200)
   ->content_is("helloHello two USen-us\n");
