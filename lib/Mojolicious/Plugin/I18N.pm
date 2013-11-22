@@ -104,29 +104,40 @@ sub register {
 	});
 	
 	# Reimplement "url_for" helper
-	$app->helper(url_for => sub {
-		my $self = shift;
-		my $url  = $self->url_for(@_);
+	my $mojo_url_for = *Mojolicious::Controller::url_for{CODE};
+	
+	my $i18n_url_for = sub {
+		my ( $self, $target, %params ) = @_;
 		
-		# detect lang
+		my $url = $self->$mojo_url_for($target, %params);
 		
-		my $lang = $self->stash('lang');
-		my $i; for (@_) {
-			$i++;
-			if ($_ eq 'lang'){
-				$lang = $_[$i];
-				last;                                                                                                                                                                                 
-			}   
-		}   
-		
-		if ($lang) {
-			my $str = $url->path;
-			my $new = "/$lang" . ($str eq '/' ? '' : $str);
-			$url->path( $new );
+		# Absolute URL
+		if ( $url->is_abs() ) {
+			return $url;
+		}
+			
+		# Detect lang
+		if ( my $lang = $params{'lang'} || $self->stash('lang') ) {
+			my $path = $url->path();
+			
+			# Root
+			if ( not $path->[0] ) {
+				$path->parts([ $lang ]);
+			# No language detected
+			} elsif ( ref $langs ne 'ARRAY' or not scalar grep { $path->contains("/$_") } @{ $langs } ) {
+				unshift @{ $path->parts() }, $lang;
+			}
 		}
 		
-		$url;
-	});
+		return $url;
+	};
+	
+	{
+		no strict 'refs';
+		no warnings 'redefine';
+		
+		*Mojolicious::Controller::url_for = $i18n_url_for;
+	}
 }
 
 package Mojolicious::Plugin::I18N::_Handler;
