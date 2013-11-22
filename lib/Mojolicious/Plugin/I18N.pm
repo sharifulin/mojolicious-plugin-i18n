@@ -107,28 +107,29 @@ sub register {
 	my $mojo_url_for = *Mojolicious::Controller::url_for{CODE};
 	
 	my $i18n_url_for = sub {
-		my $self = shift;
+		my ( $self, $target, %params ) = @_;
 		
-		my $url = $mojo_url_for->($self, @_);
+		my $url = $self->$mojo_url_for($target, %params);
 		
-		# detect lang
-		
-		my $lang = $self->stash('lang');
-		my $i; for (@_) {
-			$i++;
-			if ($_ eq 'lang'){
-				$lang = $_[$i];
-				last;
+		# Absolute URL
+		if ( $url->is_abs() ) {
+			return $url;
+		}
+			
+		# Detect lang
+		if ( my $lang = $params{'lang'} || $self->stash('lang') ) {
+			my $path = $url->path();
+			
+			# Root
+			if ( not $path->[0] ) {
+				$path->parts([ $lang ]);
+			# No language detected
+			} elsif ( ref $langs ne 'ARRAY' or not scalar grep { $path->contains("/$_") } @{ $langs } ) {
+				unshift @{ $path->parts() }, $lang;
 			}
 		}
 		
-		if ($lang) {
-			my $str = $url->path;
-			my $new = "/$lang" . ($str eq '/' ? '' : $str);
-			$url->path( $new );
-		}
-		
-		$url;
+		return $url;
 	};
 	
 	{
