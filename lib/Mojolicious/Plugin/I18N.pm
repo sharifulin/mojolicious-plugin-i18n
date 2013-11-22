@@ -104,9 +104,12 @@ sub register {
 	});
 	
 	# Reimplement "url_for" helper
-	$app->helper(url_for => sub {
+	my $mojo_url_for = *Mojolicious::Controller::url_for{CODE};
+	
+	my $i18n_url_for = sub {
 		my $self = shift;
-		my $url  = $self->url_for(@_);
+		
+		my $url = $mojo_url_for->($self, @_);
 		
 		# detect lang
 		
@@ -115,9 +118,9 @@ sub register {
 			$i++;
 			if ($_ eq 'lang'){
 				$lang = $_[$i];
-				last;                                                                                                                                                                                 
-			}   
-		}   
+				last;
+			}
+		}
 		
 		if ($lang) {
 			my $str = $url->path;
@@ -126,7 +129,14 @@ sub register {
 		}
 		
 		$url;
-	});
+	};
+	
+	{
+		no strict 'refs';
+		no warnings 'redefine';
+		
+		*Mojolicious::Controller::url_for = $i18n_url_for;
+	}
 }
 
 package Mojolicious::Plugin::I18N::_Handler;
