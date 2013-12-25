@@ -5,7 +5,7 @@ use Mojo::URL;
 use I18N::LangTags;
 use I18N::LangTags::Detect;
 
-our $VERSION = '1.0';
+our $VERSION = '1.1';
 
 # "Can we have Bender burgers again?
 #  No, the cat shelter’s onto me."
@@ -377,7 +377,7 @@ L<http://search.cpan.org/dist/Mojolicious-Plugin-I18N>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (C) 2011-2013 by Anatoly Sharifulin.
+Copyright (C) 2011-2014 by Anatoly Sharifulin.
 Copyright (C) 2008-2012, Sebastian Riedel.
 
 This program is free software, you can redistribute it and/or modify it under

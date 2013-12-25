@@ -8,6 +8,7 @@ my $builder = Module::Build->new(
 	dist_author         => 'Anatoly Sharifulin <sharifulin@gmail.com>',
 	dist_version_from   => 'lib/Mojolicious/Plugin/I18N.pm',
 	dist_abstract       => 'Internationalization Plugin for Mojolicious 3.x and higher',
+	configure_requires  => { 'Module::Build' => 0.42 },
 	build_requires => {
 		'Test::More' => 0,
 	},
