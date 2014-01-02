@@ -1,7 +1,11 @@
 Revision history for Mojolicious-Plugin-I18N
 
+1.2  2014-12-02/07:35
+	* Cleanup, bugfixes for CPAN Testers
+	* Happy New Year! :-)
+
 1.1  2013-12-25/13:20
-	* Some bugfixes, thank you github.com and @temoon :-)
+	* Some bugfixes, thank you github.com and @temoon
 
 1.0  2013-06-01/17:05
 	* Stable version of i18n  plugin, it works with Mojolicious 4.0+
@@ -10,7 +14,7 @@ Revision history for Mojolicious-Plugin-I18N
 	* fixed default langauage and url_for, thnx github.com
 
 0.82 2012-12-09/19:09
-	* pull reqs on github.com, thanks everyone :)
+	* pull reqs on github.com, thanks everyone
 
 0.81 2012-07-23/16:32
 	* fixed test suite
