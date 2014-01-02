@@ -5,7 +5,7 @@ use Mojo::URL;
 use I18N::LangTags;
 use I18N::LangTags::Detect;
 
-our $VERSION = '1.1';
+our $VERSION = '1.2';
 
 # "Can we have Bender burgers again?
 #  No, the cat shelter’s onto me."
@@ -107,25 +107,25 @@ sub register {
 	my $mojo_url_for = *Mojolicious::Controller::url_for{CODE};
 	
 	my $i18n_url_for = sub {
-		my ( $self, $target, %params ) = @_;
+		my($self, $target, %params) = @_;
 		
 		my $url = $self->$mojo_url_for($target, %params);
 		
 		# Absolute URL
-		if ( $url->is_abs() ) {
-			return $url;
-		}
+		return $url if $url->is_abs;
 			
 		# Detect lang
-		if ( my $lang = $params{'lang'} || $self->stash('lang') ) {
-			my $path = $url->path();
+		if (my $lang = $params{lang} || $self->stash('lang')) {
+			my $path = $url->path || [];
 			
 			# Root
-			if ( not $path->[0] ) {
+			if (!$path->[0]) {
 				$path->parts([ $lang ]);
+			}
+			
 			# No language detected
-			} elsif ( ref $langs ne 'ARRAY' or not scalar grep { $path->contains("/$_") } @{ $langs } ) {
-				unshift @{ $path->parts() }, $lang;
+			elsif ( ref $langs ne 'ARRAY' or not scalar grep { $path->contains("/$_") } @$langs ) {
+				unshift @{ $path->parts }, $lang;
 			}
 		}
 		
@@ -230,7 +230,7 @@ __END__
 
 =head1 NAME
 
-Mojolicious::Plugin::I18N - Internationalization Plugin for Mojolicious 3.x and higher
+Mojolicious::Plugin::I18N - Internationalization Plugin for Mojolicious
 
 =head1 SYNOPSIS
 
@@ -253,7 +253,7 @@ Mojolicious::Plugin::I18N - Internationalization Plugin for Mojolicious 3.x and 
 
 =head1 DESCRIPTION
 
-L<Mojolicious::Plugin::I18N> is internationalization plugin for Mojolicious 3.x and higher.
+L<Mojolicious::Plugin::I18N> is internationalization plugin for Mojolicious
 It works with Mojolicious 4.0+.
 
 Old namespace is L<Mojolicious::Plugin::I18N2>.
@@ -335,9 +335,9 @@ L<Mojolicious::Plugin::I18N> has debug mode.
 
 L<Mojolicious>, L<Mojolicious::Guides>, L<http://mojolicio.us>.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-2011-2012 Anatoly Sharifulin <sharifulin@gmail.com>
+2011-2014 Anatoly Sharifulin <sharifulin@gmail.com>
 
 2010-2012 Sebastian Riedel <kraihx@googlemail.com>
 

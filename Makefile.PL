@@ -11,7 +11,7 @@ WriteMakefile
   'PREREQ_PM' => {
                    'Test::More' => 0,
                    'I18N::LangTags' => '0.35',
-                   'Mojolicious' => '3'
+                   'Mojolicious' => '4'
                  }
 )
 ;

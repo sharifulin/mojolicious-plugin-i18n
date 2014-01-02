@@ -1,5 +1,5 @@
 ---
-abstract: 'Internationalization Plugin for Mojolicious 3.x and higher'
+abstract: 'Internationalization Plugin for Mojolicious'
 author:
   - 'Anatoly Sharifulin <sharifulin@gmail.com>'
 build_requires:
@@ -22,12 +22,12 @@ name: Mojolicious-Plugin-I18N
 provides:
   Mojolicious::Plugin::I18N:
     file: lib/Mojolicious/Plugin/I18N.pm
-    version: 1.1
+    version: 1.2
 requires:
   I18N::LangTags: 0.35
-  Mojolicious: 3
+  Mojolicious: 4
   perl: 5.010001
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://github.com/sharifulin/Mojolicious-Plugin-I18N
-version: 1.1
+version: 1.2

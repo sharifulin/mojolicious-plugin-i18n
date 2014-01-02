@@ -7,7 +7,7 @@ my $builder = Module::Build->new(
 	license             => 'perl',
 	dist_author         => 'Anatoly Sharifulin <sharifulin@gmail.com>',
 	dist_version_from   => 'lib/Mojolicious/Plugin/I18N.pm',
-	dist_abstract       => 'Internationalization Plugin for Mojolicious 3.x and higher',
+	dist_abstract       => 'Internationalization Plugin for Mojolicious',
 	configure_requires  => { 'Module::Build' => 0.42 },
 	build_requires => {
 		'Test::More' => 0,
@@ -15,7 +15,7 @@ my $builder = Module::Build->new(
 	requires => {
 		'perl'           => 5.010001,
 		'I18N::LangTags' => 0.35,
-		'Mojolicious'    => 3.0,
+		'Mojolicious'    => 4.0,
 	},
 	add_to_cleanup  => [],
 	meta_merge => {
@@ -27,4 +27,4 @@ my $builder = Module::Build->new(
 	create_makefile_pl => 'traditional',
 );
 
-$builder->create_build_script();
+$builder->create_build_script;
