@@ -107,12 +107,17 @@ sub register {
 	my $mojo_url_for = *Mojolicious::Controller::url_for{CODE};
 	
 	my $i18n_url_for = sub {
-		my($self, $target, %params) = @_;
-		
-		my $url = $self->$mojo_url_for($target, %params);
+                my $self = shift;
+		my $url  = $self->$mojo_url_for(@_);
 		
 		# Absolute URL
 		return $url if $url->is_abs;
+
+                # Discard target if present
+                shift if (@_ % 2 && !ref $_[0]) || (@_ > 1 && ref $_[-1]);
+                
+                # Unveil params
+                my %params = @_ == 1 ? %{$_[0]} : @_;
 			
 		# Detect lang
 		if (my $lang = $params{lang} || $self->stash('lang')) {
