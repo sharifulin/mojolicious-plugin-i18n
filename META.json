@@ -42,7 +42,7 @@
    "provides" : {
       "Mojolicious::Plugin::I18N" : {
          "file" : "lib/Mojolicious/Plugin/I18N.pm",
-         "version" : "1.2"
+         "version" : "1.21"
       }
    },
    "release_status" : "stable",
@@ -54,5 +54,5 @@
          "url" : "http://github.com/sharifulin/Mojolicious-Plugin-I18N"
       }
    },
-   "version" : "1.2"
+   "version" : "1.21"
 }

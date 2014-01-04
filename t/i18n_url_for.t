@@ -43,7 +43,7 @@ post '/login' => sub {
   # Do login things ;)
   # ...
   
-  return $self->redirect_to($self->param('next') || 'index');
+  $self->redirect_to($self->param('next') || 'index');
 };
 
 #
@@ -65,7 +65,19 @@ $t->get_ok('/de')->status_is(200)
 $t->get_ok('/es')->status_is(404);
 
 $t->get_ok('/test/hello')->status_is(200)
-  ->content_is("/test/hello\n/en/test/hello\n/en/test/hello\n/en/test/hello\n/en/test/hello\n/en/perldoc\n//mojolicio.us/en/perldoc\nhttp://mojolicio.us/perldoc\nmailto:sri\@example.com\n");
+  ->content_is(
+	join "\n", qw(
+		/test/hello
+		/en/test/hello
+		/en/test/hello
+		/en/test/hello
+		/en/test/hello
+		/en/perldoc
+		//mojolicio.us/en/perldoc
+		http://mojolicio.us/perldoc
+	), ''
+  )
+;
 
 my $port = $t->tx->remote_port();
 
@@ -116,4 +128,3 @@ __DATA__
 %= url_for('/perldoc', lang => 'en')
 %= url_for('//mojolicio.us/perldoc', lang => 'en')
 %= url_for('http://mojolicio.us/perldoc', lang => 'en')
-%= url_for('mailto:sri@example.com', lang => 'en')
