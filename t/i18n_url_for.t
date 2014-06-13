@@ -85,28 +85,28 @@ $t->get_ok('/auth')->status_is(200)
   ->content_is(qq{<a href="http://example.com/widget?lang=ru&token_url=http://localhost:$port/login?next=/auth">auth</a>\n});
 
 $t->post_ok('/login?next=/auth')->status_is(302)
-  ->header_is('Location' => "http://localhost:$port/auth");
+  ->header_is('Location' => "/auth");
 
 $t->get_ok('/ru/auth')->status_is(200)
   ->content_is(qq{<a href="http://example.com/widget?lang=ru&token_url=http://localhost:$port/ru/login?next=/ru/auth">auth</a>\n});
 
 $t->post_ok('/login?next=/ru/auth')->status_is(302)
-  ->header_is('Location' => "http://localhost:$port/ru/auth");
+  ->header_is('Location' => "/ru/auth");
 
 $t->get_ok('/en/auth')->status_is(200)
   ->content_is(qq{<a href="http://example.com/widget?lang=en&token_url=http://localhost:$port/en/login?next=/en/auth">auth</a>\n});
 
 $t->post_ok('/login?next=/en/auth')->status_is(302)
-  ->header_is('Location' => "http://localhost:$port/en/auth");
+  ->header_is('Location' => "/en/auth");
 
 $t->post_ok('/login?next=/es/auth')->status_is(302)
-  ->header_is('Location' => "http://localhost:$port/es/auth");
+  ->header_is('Location' => "/es/auth");
 
 $t->post_ok('/login?next=/ru/en/auth')->status_is(302)
-  ->header_is('Location' => "http://localhost:$port/ru/en/auth");
+  ->header_is('Location' => "/ru/en/auth");
 
 $t->post_ok('/login?next=/english/auth')->status_is(302)
-  ->header_is('Location' => "http://localhost:$port/english/auth");
+  ->header_is('Location' => "/english/auth");
 
 done_testing;
 
