@@ -15,7 +15,7 @@ my $builder = Module::Build->new(
 	requires => {
 		'perl'           => 5.010001,
 		'I18N::LangTags' => 0.35,
-		'Mojolicious'    => 4.0,
+		'Mojolicious'    => 5.0,
 	},
 	add_to_cleanup  => [],
 	meta_merge => {

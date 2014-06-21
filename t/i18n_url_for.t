@@ -48,6 +48,10 @@ post '/login' => sub {
 
 #
 
+like $Mojolicious::VERSION, qr/^5\.\d+$/, 'Check Mojolicious 5.0';
+
+#
+
 my $t = Test::Mojo->new;
 
 $t->get_ok('/')->status_is(200)
