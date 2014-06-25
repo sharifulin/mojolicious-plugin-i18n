@@ -304,6 +304,12 @@ Default language for i18n, defaults to C<en>.
 
 Lexicon namespace, defaults to the application class followed by C<::I18N>.
 
+=head2 C<reimplement_url_for>
+
+  plugin I18N => {reimplement_url_for => 0};
+
+On/off reimlement url_for
+
 =head1 HELPERS
 
 L<Mojolicious::Plugin::I18N> implements helpers same as L<Mojolicious::Plugin::I18N>.
