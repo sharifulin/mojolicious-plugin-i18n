@@ -103,46 +103,53 @@ sub register {
 		$self->stash->{i18n}->localize(@_);
 	});
 	
-	# Reimplement "url_for" helper
-	my $mojo_url_for = *Mojolicious::Controller::url_for{CODE};
-	
-	my $i18n_url_for = sub {
-		my $self = shift;
-		my $url  = $self->$mojo_url_for(@_);
-		
-		# Absolute URL
-		return $url if $url->is_abs;
-		
-		# Discard target if present
-		shift if (@_ % 2 && !ref $_[0]) || (@_ > 1 && ref $_[-1]);
-		
-		# Unveil params
-		my %params = @_ == 1 ? %{$_[0]} : @_;
-		
-		# Detect lang
-		if (my $lang = $params{lang} || $self->stash('lang')) {
-			my $path = $url->path || [];
-			
-			# Root
-			if (!$path->[0]) {
-				$path->parts([ $lang ]);
-			}
-			
-			# No language detected
-			elsif ( ref $langs ne 'ARRAY' or not scalar grep { $path->contains("/$_") } @$langs ) {
-				unshift @{ $path->parts }, $lang;
-			}
-		}
-		
-		$url;
-	};
-	
-	{
-		no strict 'refs';
-		no warnings 'redefine';
-		
-		*Mojolicious::Controller::url_for = $i18n_url_for;
-	}
+	$conf->{reimplement_url_for} //= 1;
+
+  if ($conf->{reimplement_url_for}) {
+    #$self->app->log->debug("--- Reimplement url for");
+
+    # Reimplement "url_for" helper
+    my $mojo_url_for = *Mojolicious::Controller::url_for{CODE};
+
+    my $i18n_url_for = sub {
+      my $self = shift;
+      my $url  = $self->$mojo_url_for(@_);
+
+      # Absolute URL
+      return $url if $url->is_abs;
+
+      # Discard target if present
+      shift if (@_ % 2 && !ref $_[0]) || (@_ > 1 && ref $_[-1]);
+
+      # Unveil params
+      my %params = @_ == 1 ? %{$_[0]} : @_;
+
+      # Detect lang
+      if (my $lang = $params{lang} || $self->stash('lang')) {
+        my $path = $url->path || [];
+
+        # Root
+        if (!$path->[0]) {
+          $path->parts([ $lang ]);
+        }
+
+        # No language detected
+        elsif ( ref $langs ne 'ARRAY' or not scalar grep { $path->contains("/$_") } @$langs ) {
+          unshift @{ $path->parts }, $lang;
+        }
+      }
+
+      $url;
+    };
+
+    {
+      no strict 'refs';
+      no warnings 'redefine';
+
+      *Mojolicious::Controller::url_for = $i18n_url_for;
+    }
+
+  }
 }
 
 package Mojolicious::Plugin::I18N::_Handler;
@@ -296,6 +303,12 @@ Default language for i18n, defaults to C<en>.
   plugin I18N => {namespace => 'MyApp::I18N'};
 
 Lexicon namespace, defaults to the application class followed by C<::I18N>.
+
+=head2 C<reimplement_url_for>
+
+  plugin I18N => {reimplement_url_for => 0};
+
+On/off reimlement url_for
 
 =head1 HELPERS
 

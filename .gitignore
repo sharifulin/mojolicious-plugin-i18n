@@ -2,3 +2,4 @@
 MANIFEST.SKIP
 MANIFEST.SKIP.*
 .DS_Store
+*.swp
