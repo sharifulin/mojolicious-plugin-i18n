@@ -5,37 +5,37 @@ use Mojo::URL;
 use I18N::LangTags;
 use I18N::LangTags::Detect;
 
-our $VERSION = '1.3';
+our $VERSION = '1.3.1';
 
 # "Can we have Bender burgers again?
 #  No, the cat shelter’s onto me."
 sub register {
 	my ($plugin, $app, $conf) = @_;
-	
+
 	# Initialize
 	my $namespace = $conf->{namespace} || ( (ref $app) . '::I18N' );
 	my $default   = $conf->{default  } || 'en';
 	$default =~ tr/-A-Z/_a-z/;
 	$default =~ tr/_a-z0-9//cd;
-	
+
 	my $langs     = $conf->{support_url_langs};
 	my $hosts     = $conf->{support_hosts    };
-	
+
 	# Default Handler
 	my $handler   = sub {
 		shift->stash->{i18n} =
 			Mojolicious::Plugin::I18N::_Handler->new(namespace => $namespace, default => $default)
 		;
 	};
-	
+
 	# Add hook
 	$app->hook(
 		before_dispatch => sub {
 			my $self = shift;
-			
+
 			# Handler
 			$handler->( $self );
-			
+
 			# Header detection
 			my @languages = $conf->{no_header_detect}
 				? ()
@@ -45,102 +45,102 @@ sub register {
 					)
 				)
 			;
-			
+
 			# Host detection
 			if ($conf->{support_hosts} and my $host = $self->req->headers->host) {
 				$host =~ s/^www\.//; # hack
 				if (my $lang = $conf->{support_hosts}->{ $host }) {
 					$self->app->log->debug("Found language $lang, Host header is $host");
-					
+
 					unshift @languages, $lang;
 				}
 			}
-			
+
 			# Set default language
 			$self->stash(lang_default => $languages[0]) if $languages[0];
-			
+
 			# URL detection
 			if (my $path = $self->req->url->path) {
 				my $part = $path->parts->[0];
-			
+
 				if ($part && $langs && grep { $part eq $_ } @$langs) {
 					# Ignore static files
 					return if $self->res->code;
-					
+
 					$self->app->log->debug("Found language $part in URL $path");
-					
+
 					unshift @languages, $part;
-					
+
 					# Save lang in stash
 					$self->stash(lang => $part);
-					
+
 					# Clean path
 					shift @{$path->parts};
 					$path->trailing_slash(0);
 				}
 			}
-			
+
 			# Languages
 			$self->languages(@languages, $default);
     	}
 	);
-	
+
 	# Add "languages" helper
 	$app->helper(languages => sub {
 		my $self = shift;
-		
+
 		$handler->( $self ) unless $self->stash('i18n');
-		
+
 		$self->stash->{i18n}->languages(@_);
 	});
-	
+
 	# Add "l" helper
 	$app->helper(l => sub {
 		my $self = shift;
-		
+
 		$handler->( $self ) unless $self->stash('i18n');
-		
+
 		$self->stash->{i18n}->localize(@_);
 	});
-	
+
 	# Reimplement "url_for" helper
 	my $mojo_url_for = *Mojolicious::Controller::url_for{CODE};
-	
+
 	my $i18n_url_for = sub {
 		my $self = shift;
 		my $url  = $self->$mojo_url_for(@_);
-		
+
 		# Absolute URL
 		return $url if $url->is_abs;
-		
+
 		# Discard target if present
 		shift if (@_ % 2 && !ref $_[0]) || (@_ > 1 && ref $_[-1]);
-		
+
 		# Unveil params
 		my %params = @_ == 1 ? %{$_[0]} : @_;
-		
+
 		# Detect lang
 		if (my $lang = $params{lang} || $self->stash('lang')) {
 			my $path = $url->path || [];
-			
+
 			# Root
 			if (!$path->[0]) {
 				$path->parts([ $lang ]);
 			}
-			
+
 			# No language detected
 			elsif ( ref $langs ne 'ARRAY' or not scalar grep { $path->contains("/$_") } @$langs ) {
 				unshift @{ $path->parts }, $lang;
 			}
 		}
-		
+
 		$url;
 	};
-	
+
 	{
 		no strict 'refs';
 		no warnings 'redefine';
-		
+
 		*Mojolicious::Controller::url_for = $i18n_url_for;
 	}
 }
@@ -153,22 +153,22 @@ use constant DEBUG => $ENV{MOJO_I18N_DEBUG} || 0;
 # "Robot 1-X, save my friends! And Zoidberg!"
 sub languages {
 	my ($self, @languages) = @_;
-	
+
 	unless (@languages) {
 		my $lang = $self->{language};
-		
+
 		# lang such as en-us
 		$lang =~ s/_/-/g;
-		
+
 		return $lang;
 	}
-	
+
 	# Handle
 	my $namespace = $self->{namespace};
-	
+
 	# Load Lang Module
 	$self->_load_module($namespace => $_) for @languages;
-	
+
 	if (my $handle = $namespace->get_handle(@languages)) {
 		$handle->fail_with(sub { $_[1] });
 		$self->{handle}   = $handle;
@@ -187,40 +187,40 @@ sub localize {
 
 sub _load_module {
 	my $self = shift;
-	
+
 	my($namespace, $lang) = @_;
 	return unless $namespace && $lang;
-	
+
 	# lang such as en-us
 	$lang =~ s/-/_/g;
-	
+
 	unless ($namespace->can('new')) {
 		DEBUG && warn("Load default namespace $namespace");
-		
+
 		(my $file = $namespace) =~ s{::|'}{/}g;
 		eval qq(require "$file.pm");
-		
+
 		if ($@) {
 			DEBUG && warn("Create default namespace $namespace");
-			
+
 			eval "package $namespace; use base 'Locale::Maketext'; 1;";
 			die qq/Couldn't initialize I18N default class "$namespace": $@/ if $@;
 		}
 	}
-	
+
 	for ($self->{default}, $lang) {
 		my $module = "${namespace}::$_";
 		unless ($module->can('new')) {
 			DEBUG && warn("Load the I18N class $module");
-		
+
 			(my $file = $module) =~ s{::|'}{/}g;
 			eval qq(require "$file.pm");
-		
+
 			my $default = $self->{default};
 			if ($@ || not eval "\%${module}::Lexicon") {
 				if ($_ eq $default) {
 					DEBUG && warn("Create the I18N class $module");
-					
+
 					eval "package ${module}; use base '$namespace';" . 'our %Lexicon = (_AUTO => 1); 1;';
 					die qq/Couldn't initialize I18N class "$namespace": $@/ if $@;
 				}
@@ -247,7 +247,7 @@ Mojolicious::Plugin::I18N - Internationalization Plugin for Mojolicious
   # Mojolicious::Lite (detect language from URL, i.e. /en/ or /de/)
   plugin I18N => {namespace => 'MyApp::I18N', support_url_langs => [qw(en de)]};
   %=l 'hello'
-  
+
   # Lexicon
   package MyApp::I18N::de;
   use Mojo::Base 'MyApp::I18N';
@@ -268,7 +268,7 @@ Old namespace is L<Mojolicious::Plugin::I18N2>.
 L<Mojolicious::Plugin::I18N> supports the following options.
 
 =head2 C<support_url_langs>
-  
+
   plugin I18N => {support_url_langs => [qw(en de)]};
 
 Detect language from URL.
@@ -277,7 +277,7 @@ Detect language from URL.
 
   plugin I18N => {support_hosts => { 'mojolicious.ru' => 'ru', 'mojolicio.us' => 'en' }};
 
-Detect Host header and use language for that host. 
+Detect Host header and use language for that host.
 
 =head2 C<no_header_detect>
 

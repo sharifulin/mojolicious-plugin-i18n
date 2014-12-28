@@ -39,10 +39,10 @@ get '/test/:slug' => 'compat';
 
 post '/login' => sub {
   my $self = shift;
-  
+
   # Do login things ;)
   # ...
-  
+
   $self->redirect_to($self->param('next') || 'index');
 };
 
@@ -83,22 +83,23 @@ $t->get_ok('/test/hello')->status_is(200)
   )
 ;
 
-my $port = $t->tx->remote_port();
+my $domain = $t->tx->remote_address;
+my $port   = $t->tx->remote_port;
 
 $t->get_ok('/auth')->status_is(200)
-  ->content_is(qq{<a href="http://example.com/widget?lang=ru&token_url=http://localhost:$port/login?next=/auth">auth</a>\n});
+  ->content_is(qq{<a href="http://example.com/widget?lang=ru&token_url=http://$domain:$port/login?next=/auth">auth</a>\n});
 
 $t->post_ok('/login?next=/auth')->status_is(302)
   ->header_is('Location' => "/auth");
 
 $t->get_ok('/ru/auth')->status_is(200)
-  ->content_is(qq{<a href="http://example.com/widget?lang=ru&token_url=http://localhost:$port/ru/login?next=/ru/auth">auth</a>\n});
+  ->content_is(qq{<a href="http://example.com/widget?lang=ru&token_url=http://$domain:$port/ru/login?next=/ru/auth">auth</a>\n});
 
 $t->post_ok('/login?next=/ru/auth')->status_is(302)
   ->header_is('Location' => "/ru/auth");
 
 $t->get_ok('/en/auth')->status_is(200)
-  ->content_is(qq{<a href="http://example.com/widget?lang=en&token_url=http://localhost:$port/en/login?next=/en/auth">auth</a>\n});
+  ->content_is(qq{<a href="http://example.com/widget?lang=en&token_url=http://$domain:$port/en/login?next=/en/auth">auth</a>\n});
 
 $t->post_ok('/login?next=/en/auth')->status_is(302)
   ->header_is('Location' => "/en/auth");
