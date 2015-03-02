@@ -48,7 +48,7 @@ post '/login' => sub {
 
 #
 
-like $Mojolicious::VERSION, qr/^5\.\d+$/, 'Check Mojolicious 5.0';
+cmp_ok $Mojolicious::VERSION, '>=', 5.0, 'Check Mojolicious >= 5.0';
 
 #
 
