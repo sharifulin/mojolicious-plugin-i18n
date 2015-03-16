@@ -1,5 +1,8 @@
 Revision history for Mojolicious-Plugin-I18N
 
+1.5 2015-03-17/11:32
+	* Mojolicious 6 ready
+
 1.4 2014-12-28/21:04
 	* Fixed [rt.cpan.org #101168] Fails with Mojolicious 5.69 and 5.70
 	* Merry X-Mas!
