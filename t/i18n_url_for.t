@@ -86,20 +86,23 @@ $t->get_ok('/test/hello')->status_is(200)
 my $domain = $t->tx->remote_address;
 my $port   = $t->tx->remote_port;
 
+my $auth_next = $Mojolicious::VERSION >= 6.09 ? '%2Fauth' : '/auth';
 $t->get_ok('/auth')->status_is(200)
-  ->content_is(qq{<a href="http://example.com/widget?lang=ru&token_url=http://$domain:$port/login?next=/auth">auth</a>\n});
+  ->content_is(qq{<a href="http://example.com/widget?lang=ru&token_url=http://$domain:$port/login?next=$auth_next">auth</a>\n});
 
 $t->post_ok('/login?next=/auth')->status_is(302)
   ->header_is('Location' => "/auth");
 
+my $ru_auth_next = $Mojolicious::VERSION >= 6.09 ? '%2Fru%2Fauth' : '/ru/auth';
 $t->get_ok('/ru/auth')->status_is(200)
-  ->content_is(qq{<a href="http://example.com/widget?lang=ru&token_url=http://$domain:$port/ru/login?next=/ru/auth">auth</a>\n});
+  ->content_is(qq{<a href="http://example.com/widget?lang=ru&token_url=http://$domain:$port/ru/login?next=$ru_auth_next">auth</a>\n});
 
 $t->post_ok('/login?next=/ru/auth')->status_is(302)
   ->header_is('Location' => "/ru/auth");
 
+my $en_auth_next = $Mojolicious::VERSION >= 6.09 ? '%2Fen%2Fauth' : '/en/auth';
 $t->get_ok('/en/auth')->status_is(200)
-  ->content_is(qq{<a href="http://example.com/widget?lang=en&token_url=http://$domain:$port/en/login?next=/en/auth">auth</a>\n});
+  ->content_is(qq{<a href="http://example.com/widget?lang=en&token_url=http://$domain:$port/en/login?next=$en_auth_next">auth</a>\n});
 
 $t->post_ok('/login?next=/en/auth')->status_is(302)
   ->header_is('Location' => "/en/auth");
