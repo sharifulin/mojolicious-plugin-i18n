@@ -5,7 +5,7 @@ use Mojo::URL;
 use I18N::LangTags;
 use I18N::LangTags::Detect;
 
-our $VERSION = '1.5';
+our $VERSION = '1.5.1';
 
 # "Can we have Bender burgers again?
 #  No, the cat shelter’s onto me."
@@ -47,7 +47,9 @@ sub register {
 			;
 
 			# Host detection
-			if ($conf->{support_hosts} and my $host = $self->req->headers->host) {
+			my $host = $self->req->headers->header('X-Host') || $self->req->headers->host;
+			if ($conf->{support_hosts} && $host) {
+				warn $host;
 				$host =~ s/^www\.//; # hack
 				if (my $lang = $conf->{support_hosts}->{ $host }) {
 					$self->app->log->debug("Found language $lang, Host header is $host");

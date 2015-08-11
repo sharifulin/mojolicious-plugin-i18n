@@ -3,15 +3,15 @@ require 5.010001;
 use ExtUtils::MakeMaker;
 WriteMakefile
 (
+  'NAME' => 'Mojolicious::Plugin::I18N',
   'PREREQ_PM' => {
                    'Test::More' => 0,
-                   'Mojolicious' => '5',
-                   'I18N::LangTags' => '0.35'
+                   'I18N::LangTags' => '0.35',
+                   'Mojolicious' => '5'
                  },
-  'NAME' => 'Mojolicious::Plugin::I18N',
-  'PL_FILES' => {},
   'EXE_FILES' => [],
-  'VERSION_FROM' => 'lib/Mojolicious/Plugin/I18N.pm',
-  'INSTALLDIRS' => 'site'
+  'PL_FILES' => {},
+  'INSTALLDIRS' => 'site',
+  'VERSION_FROM' => 'lib/Mojolicious/Plugin/I18N.pm'
 )
 ;
