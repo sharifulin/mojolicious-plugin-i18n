@@ -172,7 +172,7 @@ sub languages {
 	$self->_load_module($namespace => $_) for @languages;
 
 	if (my $handle = $namespace->get_handle(@languages)) {
-		$handle->fail_with(sub { $_[1] });
+		#$handle->fail_with(sub { $_[1] });
 		$self->{handle}   = $handle;
 		$self->{language} = $handle->language_tag;
 	}

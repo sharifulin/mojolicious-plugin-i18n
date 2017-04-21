@@ -14,7 +14,7 @@ package MyTestApp::I18N::de;
 use Mojo::Base -strict;
 use base 'MyTestApp::I18N';
 
-our %Lexicon = (hello => 'hallo');
+our %Lexicon = ( _AUTO => 1, hello => 'hallo');
 
 # "Aw, he looks like a little insane drunken angel."
 package main;

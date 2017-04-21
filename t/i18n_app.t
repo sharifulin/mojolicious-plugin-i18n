@@ -26,19 +26,19 @@ get '/' => 'index';
 my $t = Test::Mojo->new;
 
 $t->get_ok('/')->status_is(200)
-  ->content_is("ПриветПривет дваru\n");
+  ->content_is("ПриветПривет дваrufailed_inexistent_key_in_lexicon\n");
 
 $t->get_ok('/ru')->status_is(200)
-  ->content_is("ПриветПривет дваru\n");
+  ->content_is("ПриветПривет дваrufailed_inexistent_key_in_lexicon\n");
 
 $t->get_ok('/en')->status_is(200)
-  ->content_is("helloHello twoen\n");
+  ->content_is("failed_helloHello twoenfailed_inexistent_key_in_lexicon\n");
 
 $t->get_ok('/de')->status_is(200)
-  ->content_is("ПриветПривет дваru\n");
+  ->content_is("ПриветПривет дваrufailed_inexistent_key_in_lexicon\n");
 
 $t->get_ok('/en-us')->status_is(200)
-  ->content_is("helloHello two USen-us\n");
+  ->content_is("helloHello two USen-usinexistent_key_in_lexicon\n");
 
 $t->get_ok('/es')->status_is(404);
 
@@ -46,4 +46,4 @@ done_testing;
 
 __DATA__
 @@ index.html.ep
-<%=l 'hello' %><%=l 'hello2' %><%= languages %>
+<%=l 'hello' %><%=l 'hello2' %><%= languages %><%=l 'inexistent_key_in_lexicon' %>
